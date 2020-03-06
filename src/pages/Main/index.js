@@ -48,6 +48,7 @@ export default class Main extends Component {
     const { newRepo, repositories } = this.state;
 
     try {
+      this.repositoryAlreadyExists();
       const response = await api.get(`/repos/${newRepo}`);
 
       const data = {
@@ -67,6 +68,16 @@ export default class Main extends Component {
       });
     }
   };
+
+  repositoryAlreadyExists() {
+    const { newRepo, repositories } = this.state;
+
+    const found = repositories.find(repo => repo.name === newRepo);
+
+    if (found) {
+      throw new Error('Duplicate Repository');
+    }
+  }
 
   render() {
     const { newRepo, loading, repositories, error } = this.state;
